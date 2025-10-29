@@ -613,7 +613,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
 };
 
 // Demo Component
-export default function SelectDemo() {
+export function SelectDemo() {
 	const [framework, setFramework] = useState<string>('');
 	const [fruit, setFruit] = useState<string>('apple');
 	const [isOpen, setIsOpen] = useState<boolean>(false);
