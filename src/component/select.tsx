@@ -1,5 +1,3 @@
-'use client'
-
 import React, { useState, useRef, useEffect, type ReactNode, type ReactElement } from 'react';
 import { ChevronDown, Check, X } from 'lucide-react';
 
@@ -187,7 +185,7 @@ const Select: React.FC<SelectProps> = ({
 				if (React.isValidElement(child)) {
 					// Find SelectContent to pass its children to SelectTrigger
 					const selectContent = React.Children.toArray(children).find(
-						(c): c is ReactElement => React.isValidElement(c) && c.type === SelectContent
+						(c): c is ReactElement<SelectContentProps> => React.isValidElement(c) && c.type === SelectContent
 					);
 
 					return React.cloneElement(child, {
@@ -204,7 +202,7 @@ const Select: React.FC<SelectProps> = ({
 						filterValue: creatable ? inputValue : undefined,
 						onCreateValue: handleCreateValue,
 						maxLength,
-					} as any);
+					});
 				}
 				return child;
 			})}
@@ -292,7 +290,7 @@ interface SelectContentInternalProps extends SelectContentProps {
 	onCreateValue?: () => void;
 }
 
-const SelectContent: React.FC<SelectContentInternalProps> = ({ children, isOpen, onValueChange, value, filterValue, creatable, onCreateValue }) => {
+const SelectContent: React.FC<SelectContentProps> = ({ children, isOpen, onValueChange, value, filterValue, creatable, onCreateValue }) => {
 	if (!isOpen) return null;
 
 	// Filter children based on filterValue
@@ -484,7 +482,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
 
 	// Find SelectContent to get items
 	const selectContent = React.Children.toArray(children).find(
-		(c): c is ReactElement => React.isValidElement(c) && c.type === SelectContent
+		(c): c is ReactElement<SelectContentProps> => React.isValidElement(c) && c.type === SelectContent
 	);
 
 	const getItemLabel = (itemValue: string): ReactNode => {
@@ -615,7 +613,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
 };
 
 // Demo Component
-export function SelectDemo() {
+export default function SelectDemo() {
 	const [framework, setFramework] = useState<string>('');
 	const [fruit, setFruit] = useState<string>('apple');
 	const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -691,24 +689,24 @@ export function SelectDemo() {
 						)}
 					</div>
 
-					{/*<div className="space-y-2">*/}
-					{/*	<label className="text-sm font-medium text-gray-700">*/}
-					{/*		MultiSelect - Colors (Empty by default)*/}
-					{/*	</label>*/}
-					{/*	<MultiSelect*/}
-					{/*		value={colors}*/}
-					{/*		onValueChange={setColors}*/}
-					{/*		placeholder="Choose colors..."*/}
-					{/*	>*/}
-					{/*		<SelectContent>*/}
-					{/*			<SelectItem value="red">Red</SelectItem>*/}
-					{/*			<SelectItem value="blue">Blue</SelectItem>*/}
-					{/*			<SelectItem value="green">Green</SelectItem>*/}
-					{/*			<SelectItem value="yellow">Yellow</SelectItem>*/}
-					{/*			<SelectItem value="purple">Purple</SelectItem>*/}
-					{/*		</SelectContent>*/}
-					{/*	</MultiSelect>*/}
-					{/*</div>*/}
+					<div className="space-y-2">
+						<label className="text-sm font-medium text-gray-700">
+							MultiSelect - Colors (Empty by default)
+						</label>
+						<MultiSelect
+							value={colors}
+							onValueChange={setColors}
+							placeholder="Choose colors..."
+						>
+							<SelectContent>
+								<SelectItem value="red">Red</SelectItem>
+								<SelectItem value="blue">Blue</SelectItem>
+								<SelectItem value="green">Green</SelectItem>
+								<SelectItem value="yellow">Yellow</SelectItem>
+								<SelectItem value="purple">Purple</SelectItem>
+							</SelectContent>
+						</MultiSelect>
+					</div>
 
 					<div className="space-y-2">
 						<label className="text-sm font-medium text-gray-700">
@@ -763,47 +761,47 @@ export function SelectDemo() {
 						</p>
 					</div>
 
-					{/*<div className="space-y-2">*/}
-					{/*	<label className="text-sm font-medium text-gray-700">*/}
-					{/*		Select a fruit (Disabled)*/}
-					{/*	</label>*/}
-					{/*	<Select value={fruit} onValueChange={setFruit} disabled={true}>*/}
-					{/*		<SelectTrigger>*/}
-					{/*			<SelectValue placeholder="Select a fruit" />*/}
-					{/*		</SelectTrigger>*/}
-					{/*		<SelectContent>*/}
-					{/*			<SelectItem value="apple">Apple</SelectItem>*/}
-					{/*			<SelectItem value="banana">Banana</SelectItem>*/}
-					{/*			<SelectItem value="orange">Orange</SelectItem>*/}
-					{/*			<SelectItem value="grape">Grape</SelectItem>*/}
-					{/*			<SelectItem value="mango">Mango</SelectItem>*/}
-					{/*		</SelectContent>*/}
-					{/*	</Select>*/}
-					{/*</div>*/}
+					<div className="space-y-2">
+						<label className="text-sm font-medium text-gray-700">
+							Select a fruit (Disabled)
+						</label>
+						<Select value={fruit} onValueChange={setFruit} disabled={true}>
+							<SelectTrigger>
+								<SelectValue placeholder="Select a fruit" />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value="apple">Apple</SelectItem>
+								<SelectItem value="banana">Banana</SelectItem>
+								<SelectItem value="orange">Orange</SelectItem>
+								<SelectItem value="grape">Grape</SelectItem>
+								<SelectItem value="mango">Mango</SelectItem>
+							</SelectContent>
+						</Select>
+					</div>
 
-					{/*<div className="space-y-2">*/}
-					{/*	<label className="text-sm font-medium text-gray-700">*/}
-					{/*		Select size (with onOpenChange)*/}
-					{/*	</label>*/}
-					{/*	<Select*/}
-					{/*		value="medium"*/}
-					{/*		onValueChange={() => {}}*/}
-					{/*		name="size"*/}
-					{/*		onOpenChange={(open) => setIsOpen(open)}*/}
-					{/*	>*/}
-					{/*		<SelectTrigger>*/}
-					{/*			<SelectValue placeholder="Select size" />*/}
-					{/*		</SelectTrigger>*/}
-					{/*		<SelectContent>*/}
-					{/*			<SelectItem value="small">Small</SelectItem>*/}
-					{/*			<SelectItem value="medium">Medium</SelectItem>*/}
-					{/*			<SelectItem value="large">Large</SelectItem>*/}
-					{/*		</SelectContent>*/}
-					{/*	</Select>*/}
-					{/*	<p className="text-xs text-gray-500">*/}
-					{/*		Dropdown is: {isOpen ? 'Open' : 'Closed'}*/}
-					{/*	</p>*/}
-					{/*</div>*/}
+					<div className="space-y-2">
+						<label className="text-sm font-medium text-gray-700">
+							Select size (with onOpenChange)
+						</label>
+						<Select
+							value="medium"
+							onValueChange={() => {}}
+							name="size"
+							onOpenChange={(open) => setIsOpen(open)}
+						>
+							<SelectTrigger>
+								<SelectValue placeholder="Select size" />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value="small">Small</SelectItem>
+								<SelectItem value="medium">Medium</SelectItem>
+								<SelectItem value="large">Large</SelectItem>
+							</SelectContent>
+						</Select>
+						<p className="text-xs text-gray-500">
+							Dropdown is: {isOpen ? 'Open' : 'Closed'}
+						</p>
+					</div>
 
 					<div className="space-y-2">
 						<label className="text-sm font-medium text-gray-700">
